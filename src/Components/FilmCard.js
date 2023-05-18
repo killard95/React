@@ -6,31 +6,29 @@ export default function FilmCard(props) {
   const [loading, setLoading] = useState(true);
   const [value, setValue] = useState();
   const filmArray = [];
+  console.log(props.titre);
 
-
-
-  useEffect(
-    () => {
-      fetch(`https://www.omdbapi.com/?t=${props.value}&apikey=ee03101e`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("L'Api ne répond pas !");
-          }
-          return response.json();
-        })
-        .then((actualData) => {
-          setData(actualData);
-          setError(null);
-        })
-        .catch((err) => {
-          setError(err.message);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    },
-    []
-  );
+  useEffect(() => {
+    fetch(
+      `https://www.omdbapi.com/?i=${props.titre}&type=movie&apikey=ee03101e`
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("L'Api ne répond pas !");
+        }
+        return response.json();
+      })
+      .then((actualData) => {
+        setData(actualData);
+        setError(null);
+      })
+      .catch((err) => {
+        setError(err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
   filmArray.push(data);
   return (
     <>
@@ -54,8 +52,8 @@ export default function FilmCard(props) {
             Runtime,
           }) => (
             <div className="Film" key={index}>
-              <img src={Poster} />
               <h3>{Title}</h3>
+              <img src={Poster} />
               <p>Année : {Year}</p>
               <p>durée : {Runtime}</p>
               <p>Genre : {Genre}</p>
